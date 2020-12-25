@@ -4,7 +4,7 @@ from django.views import View
 import json
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import *
 from rest_framework.response import Response
 from rest_framework.status import *
 from rest_framework import mixins
@@ -103,7 +103,7 @@ class IndexView(View):
         return HttpResponse("<h1>PUT请求：Hello World!</h1>")
 
 
-class ProjectsList(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
+class ProjectsList(ListCreateAPIView):
     # 指定查询集
     queryset = Projects.objects.all()
     # 指定序列化器
@@ -113,120 +113,20 @@ class ProjectsList(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIVie
     # 指定需要排序的字段
     ordering_fields = ['name', 'leader']
     # 在类视图中指定过滤引擎
-    filter_backends = [DjangoFilterBackend]
+    # filter_backends = [DjangoFilterBackend]
     # 指定需要过滤的字段
     filterset_fields = ['name', 'leader', 'tester']
 
     # 单独指定分页类
     # paginaton_class = PageNumberPaginationManual
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-        # 获取查询集
-        # project_qs = self.get_queryset()
-        # 使用filter_queryset方法过滤查询
-        # project_qs = self.filter_queryset(self.get_queryset())
-        # # 使用paginate_queryset进行分页，返回查询集
-        # page = self.paginate_queryset(project_qs)
-        # if page is not None:
-        #     serializer = self.get_serializer(instance=page, many=True)
-        #     return self.get_paginated_response(serializer.data)
-        # else:
-        #     project_serializer = self.get_serializer(instance=project_qs, many=True)
-        #     return JsonResponse(project_serializer.data, safe=False)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-        # project_name = request.project_name
-        # 1.校验前端传参
-        # json_data = request.body.decode('utf-8')
-        # python_data = json.loads(json_data, encoding='utf-8')
-        # serialazer = ProjectModelSerializer(data=python_data)
-        # # serialazer.is_valid()开始校验参数填入是否符合序列器的标准
-        # try:
-        #     serialazer.is_valid(raise_exception=True)
-        #     # 如果在创建序列化器对象的时候，只给data传参，那么调用save（）方法，实际调用的就是序列化器对象的create方法
-        #     serialazer.save()
-        #     return JsonResponse(serialazer.data, safe=False)
-        # except:
-        #     return JsonResponse(serialazer.errors)
-
-
-# class ProjectsDetail(View):
-#     def get_object(self, pk):
-#         try:
-#             return Projects.objects.get(id=pk)
-#         except Projects.DoesNotExist:
-#             raise Http404
-#
-#     def get(self, request, pk):
-#         try:
-#             project = self.get_object(pk)
-#             # 通过模型类对象（或者查询集），传给instance可进行序列化操作
-#             project_serializer = ProjectModelSerializer(instance=project)
-#             return JsonResponse(project_serializer.data)
-#         except:
-#             return Http404
-#
-#     def put(self, request, pk):
-#         project = self.get_object(pk)
-#         json_data = request.body.decode('utf-8')
-#         python_data = json.loads(json_data, encoding='utf-8')
-#         serializer = ProjectModelSerializer(data=python_data, instance=project)
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#             # 在创建序列化器对象时，如果同时给instance和data传参，那么调用save方法，会自动调用序列化器对象的update
-#             serializer.save()
-#             return JsonResponse(serializer.data)
-#         except:
-#             return JsonResponse(serializer.errors)
-#
-#     def delete(self, request, pk):
-#         project = self.get_object(pk)
-#         project.delete()
-#         return JsonResponse(None)
-
-
-class ProjectsDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericAPIView, mixins.DestroyModelMixin):
+class ProjectsDetail(RetrieveUpdateDestroyAPIView):
     # 指定查询集
     queryset = Projects.objects.all()
     # 指定序列化器
     serializer_class = ProjectModelSerializer
     # 在视图类中指定过滤引擎
-    filter_backends = [filters.OrderingFilter]
+    # filter_backends = [filters.OrderingFilter]
     # 指定需要排序的字段
-    ordering_fields = ['name', 'leader']
-
-    # 使用lookup_field类属性，可以修改主键路由名称
-    # 传参为pk则不需要这行代码
-    # lookup_field = 'id'
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-        # # 无需自定义get_object()方法
-        # project = self.get_object()
-        # # 使用get_serializer获取序列化器类
-        # serializer = self.get_serializer(instance=project)
-        # # 通过模型类对象（或者查询集），传给instance可进行序列化操作
-        # # serializer = ProjectModelSerializer(instance=project)
-        # return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, *args, **kwargs):
-        self.update(request, *args, **kwargs)
-        # project = self.get_object()
-        # serializer = self.get_serializer(data=project, instance=project)
-        # try:
-        #     serializer.is_valid(raise_exception=True)
-        #     # 在创建序列化器对象时，如果同时给instance和data传参，那么调用save方法，会自动调用序列化器对象的update
-        #     serializer.save()
-        #     return Response(serializer.data, status=HTTP_201_CREATED)
-        # except:
-        #     return Response(serializer.errors)
-
-    def delete(self, request, *args, **kwargs):
-        self.destroy(request, *args, **kwargs)
-        # project = self.get_object()
-        # # serializer = self.get_serializer(data=project,instance=project)
-        # project.delete()
-        # # serializer.delete()
-        # return Response(None, status=204)
+    # ordering_fields = ['name', 'leader']
