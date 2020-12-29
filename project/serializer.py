@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from interfaces.models import Interfaces
 from project.models import Projects
 
 # 1.集成Serializer类或者子类
@@ -99,3 +101,23 @@ class ProjectModelSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('icon必须是项目负责人或者测试人员')
         else:
             return attrs
+
+
+class ProjectNameSeriazer(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ('id', 'name')
+
+
+class InterfaceNameSeriazer(serializers.ModelSerializer):
+    class Meta:
+        model = Interfaces
+        fields = ('id', 'name', 'test')
+
+
+class InterfacesByProjectIdSeriazer(serializers.ModelSerializer):
+    interfaces_set = InterfaceNameSeriazer(read_only=True, many=True)
+
+    class Meta:
+        model = Projects
+        fields = ('id', 'interfaces_set')

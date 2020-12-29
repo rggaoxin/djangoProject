@@ -4,6 +4,7 @@ from django.views import View
 import json
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status
+from rest_framework.decorators import action
 from rest_framework.generics import *
 from rest_framework.response import Response
 from rest_framework.status import *
@@ -12,7 +13,7 @@ from utils.pagination import PageNumberPaginationManual
 from .models import *
 from django.db.models import Q
 from project.serializer import *
-
+from rest_framework import viewsets
 
 def index(request):
     """
@@ -103,7 +104,17 @@ class IndexView(View):
         return HttpResponse("<h1>PUT请求：Hello World!</h1>")
 
 
-class ProjectsList(ListCreateAPIView):
+# ViewSet不在支持get、post、put、delete等请求方法，二只支持action动作，如list、retrieve等
+# 但是ViewSet中未提供get_object()/get_serializer()等方法
+# 所以需要继承GenericViewSet
+class ProjectsViewSet(viewsets.ModelViewSet):
+    """
+    create:
+    创建项目信息
+
+    list:
+    显示所有项目信息
+    """
     # 指定查询集
     queryset = Projects.objects.all()
     # 指定序列化器
@@ -117,16 +128,22 @@ class ProjectsList(ListCreateAPIView):
     # 指定需要过滤的字段
     filterset_fields = ['name', 'leader', 'tester']
 
+    # 可以使用action装饰器来申明自定义的动作
+    # 默认情况下，实例方法名就是动作名
+    # methods参数用于指定该动作支持的请求方法，默认为get
+    # detail参数用于指定该动作要处理的是否为详情资源对象（url是否需要传递pk值），详情数据，返回多条数据设为false，单条数据为true
+    # @action()
+    @action(methods=['get'], detail=False)
+    def names(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = ProjectNameSeriazer(instance=queryset, many=True)
+        return Response(serializer.data)
+
     # 单独指定分页类
     # paginaton_class = PageNumberPaginationManual
-
-
-class ProjectsDetail(RetrieveUpdateDestroyAPIView):
-    # 指定查询集
-    queryset = Projects.objects.all()
-    # 指定序列化器
-    serializer_class = ProjectModelSerializer
-    # 在视图类中指定过滤引擎
-    # filter_backends = [filters.OrderingFilter]
-    # 指定需要排序的字段
-    # ordering_fields = ['name', 'leader']
+    @action(detail=True)
+    # 有BUG
+    def interfaces(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = InterfacesByProjectIdSeriazer(instance=instance)
+        return Response(serializer.data)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'interfaces.apps.InterfacesConfig',
     'rest_framework',
     'django_filters',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -145,5 +146,6 @@ REST_FRAMEWORK = {
                                 'django_filters.rest_framework.backends.DjangoFilterBackend'],
     # 分页的引擎
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
