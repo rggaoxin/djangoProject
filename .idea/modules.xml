@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../DjangoDev03/.idea/DjangoDev03.iml" filepath="$PROJECT_DIR$/../DjangoDev03/.idea/DjangoDev03.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/djangoProject.iml" filepath="$PROJECT_DIR$/.idea/djangoProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lemon-test/.idea/lemon-test.iml" filepath="$PROJECT_DIR$/../lemon-test/.idea/lemon-test.iml" />
     </modules>
   </component>
 </project>

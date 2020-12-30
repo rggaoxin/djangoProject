@@ -33,15 +33,18 @@ schema_view = get_schema_view(
         # license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=(permissions.AllowAny,),  # 权限类
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('index/', index),
-    path('project/', include('project.urls')),
+    path('', include('project.urls')),
     # path('docs/', include_docs_urls(title="测试平台接口文档", description="描述信息")),
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    path('api/', include('rest_framework.urls')),
+    path('users/', include('user.urls')),
 ]

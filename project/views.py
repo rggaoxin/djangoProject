@@ -13,7 +13,8 @@ from utils.pagination import PageNumberPaginationManual
 from .models import *
 from django.db.models import Q
 from project.serializer import *
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
+
 
 def index(request):
     """
@@ -115,6 +116,8 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     list:
     显示所有项目信息
     """
+    permission_classes = [permissions.IsAuthenticated]
+
     # 指定查询集
     queryset = Projects.objects.all()
     # 指定序列化器
@@ -127,6 +130,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     # filter_backends = [DjangoFilterBackend]
     # 指定需要过滤的字段
     filterset_fields = ['name', 'leader', 'tester']
+
 
     # 可以使用action装饰器来申明自定义的动作
     # 默认情况下，实例方法名就是动作名
