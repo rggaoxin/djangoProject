@@ -14,7 +14,6 @@ from pathlib import Path
 import datetime
 import logging
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -93,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mydjango',
         'USER': 'root',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': 3306,
     }
@@ -165,6 +164,12 @@ REST_FRAMEWORK = {
     ],
 }
 
+JWT_AUTH = {
+    # token默认过期时间5分钟，可以使用JWT_EXPIRATION_DELTA设置过期时间为1天
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    # 'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt_handler.jwt_response_payload_handler',
+}
 
 LOGGING = {
     'version': 1,
@@ -193,7 +198,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, "logs/mytest.log"),
-            'maxBytes': 100*1024*1024,
+            'maxBytes': 100 * 1024 * 1024,
             'backupCount': 10,
             'formatter': 'verbose'
         }
