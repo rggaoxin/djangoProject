@@ -1,8 +1,13 @@
-from django.urls import path, include
-from project import views
+from django.urls import path, include, re_path
+from user import views
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
-    path('login/', obtain_jwt_token)
+    path('login/', obtain_jwt_token),
+    path('register/', views.RegisterView.as_view()),
+
+    re_path(r'^(?P<username>\w{6,20})/count/$', views.UsernameValidateView.as_view(), name='check_username'),
+    re_path(r'^(?P<email>[A-Za-z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9_-]+)/count/$',
+            views.EmailValidateView.as_view(), name='check_email'),
 ]

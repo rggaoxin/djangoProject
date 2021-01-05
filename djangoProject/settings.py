@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
+# 跨域相关
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,21 +42,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog.apps.BlogConfig',
+    'corsheaders',
     # 注册子应用
     # 子应用名.apps.子应用名（首字母大写）+Config
-    'project.apps.ProjectConfig',
-    'interfaces.apps.InterfacesConfig',
-    'user.apps.UserConfig',
-
     'rest_framework',
     'django_filters',
     'drf_yasg',
+
+    'project.apps.ProjectConfig',
+    'interfaces.apps.InterfacesConfig',
+    'user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -211,3 +217,4 @@ LOGGING = {
         }
     }
 }
+
