@@ -204,7 +204,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, "logs/mytest.log"),
-            'maxBytes': 100 * 1024 * 1024,
+            'maxBytes': 100*1024*1024,
             'backupCount': 10,
             'formatter': 'verbose'
         }
@@ -217,4 +217,3 @@ LOGGING = {
         }
     }
 }
-
