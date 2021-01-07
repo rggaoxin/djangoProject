@@ -13,7 +13,7 @@ class Interfaces(BaseModel):
     # 外键
     project = models.ForeignKey('projects.Projects', on_delete=models.CASCADE,
                                 related_name='interfaces', help_text='所属项目id')
-    tester = models.CharField('测试人员', max_length=50,help_text='测试人员')
+    tester = models.CharField('测试人员', max_length=50, help_text='测试人员')
     desc = models.CharField(verbose_name='简要描述', max_length=255, help_text='简要描述', default='', null=True,
                             blank=True)
 

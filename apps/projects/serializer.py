@@ -47,8 +47,9 @@ class InterfaceNameSerializer(serializers.ModelSerializer):
 
 
 class InterfacesByProjectIdserializer(serializers.ModelSerializer):
-    interfaces_set = InterfaceNameSerializer(read_only=True, many=True)
+    """对应models中的related_name='interfaces'"""
+    interfaces = InterfaceNameSerializer(read_only=True, many=True)
 
     class Meta:
         model = Projects
-        fields = ('id', 'interfaces_set')
+        fields = ('id', 'interfaces')
