@@ -9,7 +9,7 @@ class Projects(BaseModel):
     help_text用于API文档的中文名称
     """
     id = models.AutoField(verbose_name='id主键', primary_key=True, help_text='id主键')
-    name = models.CharField(verbose_name='项目名称', max_length=200, help_text='项目名称', unique=True)
+    name = models.CharField(verbose_name='项目名称', max_length=200, help_text='项目名称')
     leader = models.CharField(verbose_name='项目经理', max_length=30, help_text='项目经理')
     tester = models.CharField(verbose_name='项目测试人员', max_length=30, help_text='项目测试人员')
     programmer = models.CharField(verbose_name='开发人员', max_length=30, help_text='开发人员', default='小白')

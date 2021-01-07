@@ -1,19 +1,8 @@
-from django.http import HttpResponse, JsonResponse, Http404
-from django.shortcuts import render
-from django.views import View
-import json
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
-from rest_framework.generics import *
 from rest_framework.response import Response
-from rest_framework.status import *
-from rest_framework import mixins
-from utils.pagination import PageNumberPaginationManual
-from .models import *
-from django.db.models import Q
+
 from projects.serializer import *
-from rest_framework import viewsets, permissions
 
 
 # ViewSet不在支持get、post、put、delete等请求方法，二只支持action动作，如list、retrieve等
@@ -68,7 +57,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     # 默认情况下，实例方法名就是动作名
     # methods参数用于指定该动作支持的请求方法，默认为get
     # detail参数用于指定该动作要处理的是否为详情资源对象（url是否需要传递pk值），详情数据，返回多条数据设为false，单条数据为true
-    # @action()
     @action(methods=['get'], detail=False)
     def names(self, request, *args, **kwargs):
         queryset = self.get_queryset()

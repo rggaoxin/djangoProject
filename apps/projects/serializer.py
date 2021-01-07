@@ -25,20 +25,24 @@ class ProjectModelSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        project_obj = super(ProjectModelSerializer, self).create(validated_data)
-        DebugTalks.objects.create(project=project_obj)
-        return project_obj
+        count = Projects.objects.filter(is_delete=False, name=validated_data['name']).count()
+        if count == 0:
+            project_obj = super(ProjectModelSerializer, self).create(validated_data)
+            DebugTalks.objects.create(project=project_obj)
+            return project_obj
+        else:
+            raise ValueError("项目名称重复")
 
 
 class ProjectNameSerializer(serializers.ModelSerializer):
     class Meta:
-        medel = Projects
+        model = Projects
         fields = ('id', 'name')
 
 
 class InterfaceNameSerializer(serializers.ModelSerializer):
     class Meta:
-        medel = Interfaces
+        model = Interfaces
         fields = ('id', 'name', 'tester')
 
 
@@ -46,5 +50,5 @@ class InterfacesByProjectIdserializer(serializers.ModelSerializer):
     interfaces_set = InterfaceNameSerializer(read_only=True, many=True)
 
     class Meta:
-        medel = Projects
+        model = Projects
         fields = ('id', 'interfaces_set')
