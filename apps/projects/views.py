@@ -65,7 +65,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             message = {
                 'message': '项目名称重复'
             }
-            return JsonResponse(message, status=400, safe=False)
+            return Response(data=message)
 
     # 可以使用action装饰器来申明自定义的动作
     # 默认情况下，实例方法名就是动作名
