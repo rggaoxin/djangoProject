@@ -24,14 +24,14 @@ class ProjectModelSerializer(serializers.ModelSerializer):
             }
         }
 
-    def create(self, validated_data):
-        count = Projects.objects.filter(is_delete=False, name=validated_data['name']).count()
-        if count == 0:
-            project_obj = super(ProjectModelSerializer, self).create(validated_data)
-            DebugTalks.objects.create(project=project_obj)
-            return project_obj
-        else:
-            raise ValueError("项目名称重复")
+    # def create(self, validated_data):
+    #     count = Projects.objects.filter(is_delete=False, name=validated_data['name']).count()
+    #     if count == 0:
+    #         project_obj = super(ProjectModelSerializer, self).create(validated_data)
+    #         DebugTalks.objects.create(project=project_obj)
+    #         return project_obj
+    #     else:
+    #         raise ValueError("项目名称重复")
 
 
 class ProjectNameSerializer(serializers.ModelSerializer):

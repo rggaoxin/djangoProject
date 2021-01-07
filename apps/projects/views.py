@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -52,6 +53,19 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance: Projects):
         instance.is_delete = True
         instance.save()
+
+    def create(self, request, *args, **kwargs):
+        count = Projects.objects.filter(is_delete=False, name=request.data['name']).count()
+        if count == 0:
+            project_obj = Projects.objects.create(request.data)
+            serializer = ProjectModelSerializer(instance=project_obj)
+            DebugTalks.objects.create(project=project_obj)
+            Response(serializer.data)
+        else:
+            message = {
+                'message': '项目名称重复'
+            }
+            return JsonResponse(message, status=400, safe=False)
 
     # 可以使用action装饰器来申明自定义的动作
     # 默认情况下，实例方法名就是动作名
