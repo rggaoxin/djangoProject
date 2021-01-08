@@ -5,7 +5,6 @@ from rest_framework.response import Response
 
 from interfaces.serializer import *
 
-
 # ViewSet不在支持get、post、put、delete等请求方法，二只支持action动作，如list、retrieve等
 # 但是ViewSet中未提供get_object()/get_serializer()等方法
 # 所以需要继承GenericViewSet
@@ -84,21 +83,11 @@ class InterfacesViewSet(viewsets.ModelViewSet):
     #             }
     #         )
     #     return Response(data=one_list)
-        # objects = self.get_object()
-        # serializer = InterfacesByProjectIdserializer(instance=objects)
-        # return Response(data=serializer.data)
+    # objects = self.get_object()
+    # serializer = InterfacesByProjectIdserializer(instance=objects)
+    # return Response(data=serializer.data)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            datas = serializer.data
-            datas = get_count_by_project(datas)
-            return self.get_paginated_response(datas)
-
-        serializer = self.get_serializer(queryset, many=True)
-        datas = serializer.data
-        datas = get_count_by_project(datas)
-        return Response(datas)
+        response = super().list(request, *args, **kwargs)
+        response.data['results'] = get_count_by_project(response.data['results'])
+        return response

@@ -3,8 +3,8 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from debugtalks.models import DebugTalks
 from projects.serializer import *
-
 
 # ViewSet不在支持get、post、put、delete等请求方法，二只支持action动作，如list、retrieve等
 # 但是ViewSet中未提供get_object()/get_serializer()等方法
@@ -77,7 +77,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=False)
     def names(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = ProjectNameSerializer(instance=queryset, many=True)
+        serializer = self.get_serializer(instance=queryset, many=True)
         return Response(serializer.data)
 
     # 单独指定分页类
@@ -99,16 +99,13 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         # return Response(data=serializer.data)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
+        response = super().list(request, *args, **kwargs)
+        response.data['results'] = get_count_by_project(response.data['results'])
+        return response
 
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            datas = serializer.data
-            datas = get_count_by_project(datas)
-            return self.get_paginated_response(datas)
-
-        serializer = self.get_serializer(queryset, many=True)
-        datas = serializer.data
-        datas = get_count_by_project(datas)
-        return Response(datas)
+    def get_serializer_class(self):
+        """重写父类的get_serializer_class方法"""
+        if self.action == 'names':
+            return ProjectNameSerializer
+        else:
+            return self.serializer_class
