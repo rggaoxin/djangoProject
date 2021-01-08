@@ -2,8 +2,6 @@ from rest_framework import serializers
 
 from interfaces.models import Interfaces
 from projects.models import Projects
-from debugtalks.models import DebugTalks
-from interfaces.models import Interfaces
 
 
 class ProjectModelSerializer(serializers.ModelSerializer):
@@ -13,7 +11,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
         # 指定为模型类的哪些字段来生成序列化器
         # fields = "__all__"
         # 指定部分字段
-        # fields = ('id', 'name', 'leader', 'tester', 'progarmer')
+        # fields = ('id', 'name', 'leader', 'tester', 'programmer')
         # 排除部分字段
         exclude = ('update_time', 'is_delete')
         # 限制字段为可读，不可写
@@ -23,15 +21,6 @@ class ProjectModelSerializer(serializers.ModelSerializer):
                 'read_only': True
             }
         }
-
-    # def create(self, validated_data):
-    #     count = Projects.objects.filter(is_delete=False, name=validated_data['name']).count()
-    #     if count == 0:
-    #         project_obj = super(ProjectModelSerializer, self).create(validated_data)
-    #         DebugTalks.objects.create(project=project_obj)
-    #         return project_obj
-    #     else:
-    #         raise ValueError("项目名称重复")
 
 
 class ProjectNameSerializer(serializers.ModelSerializer):

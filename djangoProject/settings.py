@@ -163,8 +163,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.OrderingFilter',
                                 'django_filters.rest_framework.backends.DjangoFilterBackend'],
     # 分页的引擎
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'utils.pagination.PageNumberPaginationManual',
     # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     # 认证
     # 'DEFAULT_PERMISSION_CLASSES': [
