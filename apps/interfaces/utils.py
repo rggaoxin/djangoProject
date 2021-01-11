@@ -1,11 +1,7 @@
 import re
 
-from django.db.models import Count
-
-from interfaces.models import Interfaces
-from testsuits.models import Testsuites
-from testcases.models import Testcases
 from configures.models import Configures
+from testcases.models import Testcases
 
 
 def get_count_by_project(datas):
@@ -13,7 +9,7 @@ def get_count_by_project(datas):
     for item in datas:
         create_time = item['create_time']
         date = create_time.split('T')[0]
-        time = create_time.split('T')[1].split('+')[0]
+        time = create_time.split('T')[1].split('+')[0].split('.')[0]
         item['create_time'] = date + ' ' + time
         interface_id = item['id']
         """

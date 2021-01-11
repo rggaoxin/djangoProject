@@ -1,5 +1,6 @@
-create_time = '2021-01-08T02:07:12+08:00'
+import time
+from datetime import datetime
 
-c = create_time.split('T')
-c1 = c[1].split('+')
-print(c, c1)
+print(time.time())  # 获当前时间的时间戳
+print(time.localtime())  # 获取本地时间
+print(time.strftime('%Y%m%d%H%M%S', time.localtime()))  # 时间格式化

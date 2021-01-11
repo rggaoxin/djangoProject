@@ -150,6 +150,9 @@ STATIC_URL = '/static/'
 
 # APPEND_SLASH = False
 
+REPORTS_DIR = os.path.join(BASE_DIR, 'reports')
+
+SUITES_DIR = os.path.join(BASE_DIR, 'suites')
 
 REST_FRAMEWORK = {
     # 默认相应渲染类
