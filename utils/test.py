@@ -1,6 +1,30 @@
-import time
-from datetime import datetime
+# class Solution:
+#     def twoSum(self, nums, target: int):
+#         nums_length = len(nums)
+#         for i in range(nums_length):
+#             for j in range(i+1, nums_length):
+#                 if target == nums[i] + nums[i + j]:
+#                     print([i, i + j])
+#                     break
+from typing import List
 
-print(time.time())  # 获当前时间的时间戳
-print(time.localtime())  # 获取本地时间
-print(time.strftime('%Y%m%d%H%M%S', time.localtime()))  # 时间格式化
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # hashtable = dict()
+        # for i, num in enumerate(nums):
+        #     if target - num in hashtable:
+        #         return [hashtable[target - num], i]
+        #     hashtable[nums[i]] = i
+        # return []
+        dct = {}
+        for i, n in enumerate(nums):
+            cp = target - n
+            if cp in dct:
+                return [dct[cp], i]
+            else:
+                dct[n] = i
+
+
+s = Solution()
+print(s.twoSum([3, 2, 4], 6))

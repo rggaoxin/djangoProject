@@ -47,7 +47,7 @@ urlpatterns = [
     path('', include('debugtalks.urls')),
     path('', include('reports.urls')),
     # path('', include('testcases.urls')),
-    # path('', include('testsuits.urls')),
+    path('', include('testsuits.urls')),
     path('', include('user.urls')),
     # path('docs/', include_docs_urls(title="测试平台接口文档", description="描述信息")),
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
